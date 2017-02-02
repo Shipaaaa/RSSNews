@@ -1,0 +1,59 @@
+apply plugin: 'com.android.application'
+apply plugin: 'kotlin-android'
+apply plugin: 'kotlin-android-extensions'
+
+def getVersionCodeFromProperties() {
+    Properties versionProperties = loadVersionProperties()
+    return (versionProperties["version_code"] ?: "0").toString().toInteger()
+}
+
+def getVersionNameFromProperties() {
+    Properties versionProperties = loadVersionProperties()
+    return versionProperties["version_name"]
+}
+
+private Properties loadVersionProperties() {
+    def Properties versionProperties = new Properties()
+    //noinspection GroovyAssignabilityCheck
+    versionProperties.load(project.rootProject.file('version.properties').newDataInputStream())
+    versionProperties
+}
+
+android {
+    compileSdkVersion compileSdkProjectVersion
+    buildToolsVersion buildToolsProjectVersion
+    defaultConfig {
+        applicationId "ru.shipa.rssnews"
+        minSdkVersion minSdkProjectVersion
+        targetSdkVersion compileSdkProjectVersion
+        versionCode getVersionCodeFromProperties()
+        versionName getVersionNameFromProperties()
+    }
+    buildTypes {
+        release {
+            minifyEnabled false
+            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+        }
+    }
+    sourceSets {
+        main.java.srcDirs += 'src/main/kotlin'
+    }
+}
+
+kapt {
+    generateStubs = true
+}
+
+dependencies {
+    compile "org.jetbrains.kotlin:kotlin-stdlib:$kotlin_version"
+    compile "com.android.support:appcompat-v7:$supportLibraryVersion"
+
+    //MVP
+    compile deps.moxy
+    compile deps.moxyAndroid
+    compile deps.moxyCompiler
+
+}
+repositories {
+    mavenCentral()
+}

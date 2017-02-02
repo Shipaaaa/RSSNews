@@ -1,0 +1,51 @@
+// Top-level build file where you can add configuration options common to all sub-projects/modules.
+
+buildscript {
+    ext.kotlin_version = '1.0.6'
+
+    repositories {
+        jcenter()
+    }
+    dependencies {
+        classpath 'com.android.tools.build:gradle:2.2.3'
+        classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlin_version"
+
+        // NOTE: Do not place your application dependencies here; they belong
+        // in the individual module build.gradle files
+    }
+}
+
+ext {
+    minSdkProjectVersion = 21
+    compileSdkProjectVersion = 25
+    buildToolsProjectVersion = '24.0.1'
+
+    supportLibraryVersion = '25.0.1'
+
+    moxyGroupId = "com.arello-mobile"
+
+    moxy = 'moxy'
+    moxyAndroid = 'moxy-app-compat'
+    moxyCompiler = 'moxy-compiler'
+    moxyVersion = '1.4.3'
+
+
+}
+
+ext.deps = [
+
+        //MVP
+        moxy                    : "$moxyGroupId:$moxy:$moxyVersion",
+        moxyAndroid             : "$moxyGroupId:$moxyAndroid:$moxyVersion",
+        moxyCompiler            : "$moxyGroupId:$moxyCompiler:$moxyVersion",
+]
+
+allprojects {
+    repositories {
+        jcenter()
+    }
+}
+
+task clean(type: Delete) {
+    delete rootProject.buildDir
+}
